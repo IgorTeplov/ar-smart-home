@@ -1,0 +1,16 @@
+.vscode/
+.sh/
+__pycache__
+.floo
+
+flake8wps_logs/
+.scannerwork/
+.venv/
+.env/
+venv/
+env/
+
+log/
+tmp/
+
+*.sqlite3

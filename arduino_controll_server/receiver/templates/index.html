@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Arduino Receiver Server</title>
+</head>
+<body>
+	<h1>Yahoo</h1>
+
+	<p id='status'></p>
+	<button id='start'>Start</button>
+	<button id='stop'>Stop</button>
+
+	<br>
+	{{all_models}} 
+	<br>
+	{{igor}}
+
+	{% for name in egors %}
+		<div>{{name}}<br>{{name.name}} - {{name.age}} - {{name.mod}}</div>
+	{% endfor %}
+
+	<script src="{% static 'app.js' %}{{nocache}}"></script>
+</body>
+</html>
