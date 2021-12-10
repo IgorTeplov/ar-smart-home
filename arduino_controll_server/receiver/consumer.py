@@ -11,7 +11,6 @@ class Consumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        print(self)
         if self.key is not None:
             await self.channel_layer.group_discard(
                 self.key,
@@ -28,55 +27,52 @@ class Consumer(AsyncWebsocketConsumer):
                 if command == "connect" and 'key' in jdata.keys():
                     self.key = jdata['key']
                     await self.channel_layer.group_add(
-                        self.key,
+                        f'{self.key}_interface',
                         self.channel_name
                     )
-                    await self.send(text_data=json.dumps({"status":1}))
-                elif command == "send" and "data" in jdata.keys():
                     await self.channel_layer.group_send(
-                        self.key,
+                        f'{self.key}_interface',
                         {
-                            'type': 'receiver',
-                            'data': jdata["data"]
+                            'type': 'send_status_interface',
+                            'target': 'sconnect',
+                            'data': True
+                        }
+                    )
+                elif command == "connectrpi" and 'key' in jdata.keys():
+                    self.key = jdata['key']
+                    await self.channel_layer.group_add(
+                        f'{self.key}_rpi',
+                        self.channel_name
+                    )
+                    await self.channel_layer.group_send(
+                        f'{self.key}_rpi',
+                        {
+                            'type': 'send_status_rpi',
+                            'data': 'Connected!'
+                        }
+                    )
+                    await self.channel_layer.group_send(
+                        f'{self.key}_interface',
+                        {
+                            'type': 'send_status_interface',
+                            'target': 'sconnectrpi',
+                            'data': True
+                        }
+                    )
+                elif command == 'send_to_rpi' and 'data' in jdata.keys() :
+                    await self.channel_layer.group_send(
+                        f'{self.key}_rpi',
+                        {
+                            'type': 'send_to_rpi',
+                            'data': jdata['data']
                         }
                     )
 
+    async def send_status_interface(self, event):
+        await self.send(text_data=json.dumps({"target":event["target"], "data":event["data"]}))
 
-        # text_data_jsojson.loads(text_data)n = json.loads(text_data)
-        # command = text_data_json['command']
+    async def send_status_rpi(self, event):
+        await self.send(text_data=event["data"])
 
-    async def receiver(self, event):
-        await self.send(text_data=json.dumps({"data":event['data']}))
-
-
-    # async def chat_message(self, event):
-    #     command = event['command']
-    #     if command == 'start':
-    #         self.start_listening()
-    #     elif command == 'stop':
-    #         self.stop_listening()
-    #     elif command == 'send':
-    #         await self.channel_layer.group_send(
-    #             'broadcast',
-    #             {
-    #                 'data': event['data']
-    #             }
-    #         )
-
-    # async def receiver(self):
-    #     while True:
-    #         await self.send(text_data=str(time.time()))
-    #         time.sleep(0.000001)
-    #         if self.killed:
-    #             break
-
-    # def start_listening(self):
-    #     self.killed = False
-    #     self.listener = threading.Thread(target=self.receiver)
-    #     self.listener.setDaemon(True)
-    #     self.listener.start()
-
-    # def stop_listening(self):
-    #     if self.listener is not None:
-    #         self.killed = True
-    #         self.listener = None
+    async def send_to_rpi(self, event):
+        await self.send(text_data=event["data"])

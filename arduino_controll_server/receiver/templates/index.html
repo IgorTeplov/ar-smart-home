@@ -5,23 +5,44 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Arduino Receiver Server</title>
+
+	<script>
+		{% if request.user.id is not None %}
+		const user_id = {{request.user.id}}
+		{% else %}
+		const user_id = undefined
+		{% endif %}
+	</script>
+
 </head>
 <body>
 	<h1>Yahoo</h1>
 
-	<p id='status'></p>
-	<button id='start'>Start</button>
-	<button id='stop'>Stop</button>
+	{% if request.user.id is not None %}
 
-	<br>
-	{{all_models}} 
-	<br>
-	{{igor}}
+	<div>
+		<h3>Connect to your device</h3>
+		<label for="token">Your TOKEN</label>
+		<input type="text" name="token" id='token'>
+		<button id="connect">Connect</button>
+	</div>
 
-	{% for name in egors %}
-		<div>{{name}}<br>{{name.name}} - {{name.age}} - {{name.mod}}</div>
-	{% endfor %}
+	<div>
+		<h3>Your command panel</h3>
+		<div>
+			<p>Connect status: <span id="sconnect">False</span> <span id="sconnectrpi">False</span></p>
+		</div>
+
+		<button id='reverseAutoControl'>Change Control Type</button>
+		<button id='open'>Open</button>
+		<button id='close'>Close</button>
+	</div>
 
 	<script src="{% static 'app.js' %}{{nocache}}"></script>
+	{% else %}
+
+	<a href="/admin">Log in</a>
+
+	{% endif %}
 </body>
 </html>
