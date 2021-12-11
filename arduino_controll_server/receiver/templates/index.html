@@ -14,9 +14,24 @@
 		{% endif %}
 	</script>
 
+	<style>
+		html {
+			font-size: 24px;
+		}
+		button, input{
+			font-size: 24px;
+		}
+		table td.pad {
+			padding-right: 50px;
+		}
+		table td {
+			min-width: 200px;
+		}
+	</style>
+
 </head>
 <body>
-	<h1>Yahoo</h1>
+	<h1>Blinds Control System</h1>
 
 	{% if request.user.id is not None %}
 
@@ -28,9 +43,36 @@
 	</div>
 
 	<div>
-		<h3>Your command panel</h3>
+		<h3>Control Panel</h3>
 		<div>
-			<p>Connect status: <span id="sconnect">False</span> <span id="sconnectrpi">False</span></p>
+			<table>
+				<tr>
+					<td class="pad">
+						
+					</td>
+					<td>
+						Connect Interface
+					</td>
+					<td>
+						Connect RPI
+					</td>
+					<td>
+						User controll
+					</td>
+				</tr>
+				<tr>
+					<td class="pad">
+						Status:
+					</td>
+					<td id="sconnect">
+					</td>
+					<td id="sconnectrpi">
+					</td>
+					<td id="usercontroll">
+					</td>
+				</tr>
+
+			</table>
 		</div>
 
 		<button id='reverseAutoControl'>Change Control Type</button>

@@ -21,9 +21,7 @@ arduinoSocket.onmessage = function(e) {
     if(data.target != undefined && data.data != undefined){
         document.getElementById(data.target).innerHTML = data.data
     }
-    console.log(data)
 };
-
 
 connectBut.addEventListener('click', ()=>{
     let token = yourToken.value
@@ -31,6 +29,7 @@ connectBut.addEventListener('click', ()=>{
 })
 racBut.addEventListener('click', ()=>{
     arduinoSocket.send(JSON.stringify({"command":"send_to_rpi", "data":"3"}));
+    arduinoSocket.send(JSON.stringify({"command":"send_to_rpi", "data":"4"}));
 })
 openBut.addEventListener('click', ()=>{
     arduinoSocket.send(JSON.stringify({"command":"send_to_rpi", "data":"1"}));
