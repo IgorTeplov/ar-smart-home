@@ -79,8 +79,6 @@ void run_right(int steeps){ // close
   }
 }
 
-
-char buffer = '0';
 int rot = 0;
 
 int open_w = 0;
@@ -93,21 +91,26 @@ bool user_control = false;
 
 void loop() {
   int light = analogRead(analogLightDetector);
-  
   if (Serial.available() > 0) {
-    byte a = Serial.read();
-    Serial.println(a);
-    
-    if(a == 130){
+    byte command = Serial.read();
+    if(command == 49){
       rot = 1;
     }
-    else if(a == 140){
+    else if(command == 50){
       rot = -1;
     }
-    else if(a == 142){
+    else if(command == 51){
       user_control = !user_control;
     }
-    else if(a == 252){
+    else if(command == 52){
+      if(user_control){
+        Serial.println("true");
+      }
+      else{
+        Serial.println("fals");
+      }
+    }
+    else if(command == 252){
       rot = rot;
     }
   }
