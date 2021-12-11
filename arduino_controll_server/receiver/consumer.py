@@ -150,9 +150,9 @@ class Consumer(AsyncWebsocketConsumer):
 
     async def send_to_rpi(self, event):
         if event["data"] == '1':
-            self.log({'who': self.user, 'event':'OPEN WINDOW'})
+            await self.log({'who': self.user, 'event':'OPEN WINDOW'})
         elif event["data"] == '2':
-            self.log({'who': self.user, 'event':'CLOSE WINDOW'})
+            await self.log({'who': self.user, 'event':'CLOSE WINDOW'})
         elif event["data"] == '3':
-            self.log({'who': self.user, 'event':'CHANGE MOD'})
+            await self.log({'who': self.user, 'event':'CHANGE MOD'})
         await self.send(text_data=event["data"])
